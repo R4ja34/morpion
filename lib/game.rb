@@ -22,18 +22,41 @@ class Game
     show.board(@board)
     puts "c'est au tour de #{@current_player.name}  :"
     @board.play_turn(@current_player)
+    result = @board.victory?(@current_player)
+    if result == "victoire"
+      @status = "victoire"
+    elsif result == "match nul"
+      @status = "match nul"
+    else
     @current_player = (@current_player == @players[0] ) ? @players[1] : @players[0]
     puts @current_player.name
+    end
   end
 
   def new_round
     # TO DO : relance une partie en initialisant un nouveau board mais en gardant les mêmes joueurs.
+    puts "Voulez-vous rejouer ? (oui/non)"
+    replay = gets.chomp.downcase
+    if replay == "oui"
+      @board = Board.new
+      @status = "en cours"
+    else
+      puts "Merci d'avoir joué !"
+      exit
+    end
   end
 
   def game_end
     # TO DO : permet l'affichage de fin de partie quand un vainqueur est détecté ou si il y a match nul
+    case @status
+    when "victoire"
+      puts "#{current_player.name} a gagné !"
+      new_round
+    when "match nul"
+      puts "Match nul !"
+      new_round
+    end
   end
 
 end
-
 

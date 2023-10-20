@@ -20,17 +20,39 @@ class Board
     #2) change la BoardCase jouée en fonction de la valeur du joueur (X ou O)
     action = gets.chomp.downcase
     @board.each do |row|
-    row.each do |element|
-      if element.id == action
-        element.value = player.symbol
+    row.each do |cellule|
+      if cellule.id == action && cellule.value == " "
+        cellule.value = player.symbol
         end
       end
     end
   end
-
-  def victory?
+  
+  def victory?(player)
     #TO DO : une méthode qui vérifie le plateau et indique s'il y a un vainqueur ou match nul
+    win_condition = [
+      [board[0][0], board[0][1], board[0][2]], # Lignes horizontales
+      [board[1][0], board[1][1], board[1][2]],
+      [board[2][0], board[2][1], board[2][2]],
+      [board[0][0], board[1][0], board[2][0]], # Colonnes verticales
+      [board[0][1], board[1][1], board[2][1]],
+      [board[0][2], board[1][2], board[2][2]],
+      [board[0][0], board[1][1], board[2][2]], # Diagonales
+      [board[0][2], board[1][1], board[2][0]]
+    ]
+    win_condition.each do |condition|
+      if condition.all? { |cell| cell.value == player.symbol }
+        return "victoire" # Le joueur a gagné
+      end
+    end
+  
+    # Si aucune victoire, vérifiez s'il y a un match nul
+    if board.flatten.all? { |cell| cell.value != ' ' }
+      return "match nul"
+    end
+  
+    # Si le jeu n'est pas terminé, renvoyez "en cours"
+    return "en cours"
   end
-
 
 end
